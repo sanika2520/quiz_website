@@ -1,4 +1,3 @@
-// src/context/dataContext.js
 import { createContext, useState, useEffect } from "react";
 
 const DataContext = createContext({});
@@ -96,4 +95,3 @@ export const DataProvider = ({children}) => {
 }
 
 export default DataContext;
-
