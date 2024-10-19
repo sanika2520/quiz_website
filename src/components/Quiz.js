@@ -1,3 +1,4 @@
+//src/components/Quiz.js
 import React, { useContext } from 'react';
 import DataContext from '../context/dataContext';
 
