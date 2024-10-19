@@ -1,72 +1,9 @@
-
-
-// import React, { useState } from 'react';
-// import { auth } from '../firebase'; // Import your auth object
-// import { signInWithEmailAndPassword } from 'firebase/auth'; // Import the signIn function
-
-// const Login = ({ goToSignup, goToQuiz }) => {
-//     const [email, setEmail] = useState('');
-//     const [password, setPassword] = useState('');
-//     const [error, setError] = useState('');
-
-//     const handleLogin = async (e) => {
-//         e.preventDefault();
-//         try {
-//             await signInWithEmailAndPassword(auth, email, password);
-//             console.log('User Logged In:', email);
-//             goToQuiz(); // Navigate to quiz page after successful login
-//         } catch (err) {
-//             setError(err.message); // Set error message if login fails
-//         }
-//     };
-
-//     return (
-//         <section className="text-white text-center bg-dark vh-100">
-//             <div className="container h-100">
-//                 <div className="row h-100 align-items-center justify-content-center">
-//                     <div className="col-lg-6">
-//                         <h1 className='fw-bold mb-4'>Login</h1>
-//                         {error && <div className="alert alert-danger">{error}</div>}
-//                         <form onSubmit={handleLogin} className="card p-4 bg-secondary">
-//                             <div className="mb-3">
-//                                 <input
-//                                     type="email"
-//                                     className="form-control"
-//                                     placeholder="Email"
-//                                     value={email}
-//                                     onChange={(e) => setEmail(e.target.value)}
-//                                     required
-//                                 />
-//                             </div>
-//                             <div className="mb-3">
-//                                 <input
-//                                     type="password"
-//                                     className="form-control"
-//                                     placeholder="Password"
-//                                     value={password}
-//                                     onChange={(e) => setPassword(e.target.value)}
-//                                     required
-//                                 />
-//                             </div>
-//                             <button type="submit" className="btn btn-light fw-bold w-100">Login</button>
-//                             <p className="mt-3 text-light">Don't have an account? <span onClick={goToSignup} style={{ cursor: 'pointer', textDecoration: 'underline' }}>Sign Up</span></p>
-//                         </form>
-//                     </div>
-//                 </div>
-//             </div>
-//         </section>
-//     );
-// };
-
-// export default Login;
-
-
-
+//src/components/AdminLogin.js
 // import React, { useState } from 'react';
 // import { auth } from '../firebase';
 // import { signInWithEmailAndPassword } from 'firebase/auth';
 
-// const Login = ({ role, goToSignup, goToQuiz }) => {
+// const Login = ({ role, goToSignup, goToStart }) => { // Change goToQuiz to goToStart
 //     const [email, setEmail] = useState('');
 //     const [password, setPassword] = useState('');
 //     const [error, setError] = useState('');
@@ -76,7 +13,7 @@
 //         try {
 //             await signInWithEmailAndPassword(auth, email, password);
 //             console.log(`${role} Logged In:`, email);
-//             goToQuiz(); // Navigate to quiz page after successful login
+//             goToStart(); // Navigate to Start page after successful login
 //         } catch (err) {
 //             setError(err.message); // Set error message if login fails
 //         }
@@ -111,7 +48,7 @@
 //                                 />
 //                             </div>
 //                             <button type="submit" className="btn btn-light fw-bold w-100">Login</button>
-//                             <p className="mt-3 text-light">Don't have an account? <span onClick={goToSignup} style={{ cursor: 'pointer', textDecoration: 'underline' }}>Sign Up</span></p>
+                            
 //                         </form>
 //                     </div>
 //                 </div>
@@ -123,24 +60,37 @@
 // export default Login;
 
 
-//src/components/Login.js
+
 import React, { useState } from 'react';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
-const Login = ({ role, goToSignup, goToStart }) => { // Change goToQuiz to goToStart
+const AdminLogin = ({ role, goToStart }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-    const handleLogin = async (e) => {
+    // Predefined admin email (replace this with the actual admin email)
+    const adminEmail = 'admin@gmail.com'; // Replace with the real admin email
+
+    const handleAdminLogin = async (e) => {
         e.preventDefault();
         try {
+            // Firebase authentication: sign in with email and password
             await signInWithEmailAndPassword(auth, email, password);
-            console.log(`${role} Logged In:`, email);
-            goToStart(); // Navigate to Start page after successful login
+
+            // Check if the user email matches the admin email
+            if (email !== adminEmail) {
+                setError("You're not authorized to log in as Admin.");
+                return;
+            }
+
+            // If the email matches, log in and navigate to the Start page
+            console.log("Admin Logged In:", email);
+            goToStart();
         } catch (err) {
-            setError(err.message); // Set error message if login fails
+            // Display any errors that occur during login
+            setError(err.message);
         }
     };
 
@@ -149,14 +99,14 @@ const Login = ({ role, goToSignup, goToStart }) => { // Change goToQuiz to goToS
             <div className="container h-100">
                 <div className="row h-100 align-items-center justify-content-center">
                     <div className="col-lg-6">
-                        <h1 className='fw-bold mb-4'>Login as {role}</h1>
+                        <h1 className='fw-bold mb-4'>Admin Login</h1>
                         {error && <div className="alert alert-danger">{error}</div>}
-                        <form onSubmit={handleLogin} className="card p-4 bg-secondary">
+                        <form onSubmit={handleAdminLogin} className="card p-4 bg-secondary">
                             <div className="mb-3">
                                 <input
                                     type="email"
                                     className="form-control"
-                                    placeholder="Email"
+                                    placeholder="Admin Email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
@@ -172,8 +122,7 @@ const Login = ({ role, goToSignup, goToStart }) => { // Change goToQuiz to goToS
                                     required
                                 />
                             </div>
-                            <button type="submit" className="btn btn-light fw-bold w-100">Login</button>
-                            <p className="mt-3 text-light">Don't have an account? <span onClick={goToSignup} style={{ cursor: 'pointer', textDecoration: 'underline' }}>Sign Up</span></p>
+                            <button type="submit" className="btn btn-light fw-bold w-100">Login as Admin</button>
                         </form>
                     </div>
                 </div>
@@ -182,4 +131,4 @@ const Login = ({ role, goToSignup, goToStart }) => { // Change goToQuiz to goToS
     );
 };
 
-export default Login;
+export default AdminLogin;
