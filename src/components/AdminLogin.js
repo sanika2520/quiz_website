@@ -1,21 +1,33 @@
-//src/components/AdminLogin.js
 // import React, { useState } from 'react';
 // import { auth } from '../firebase';
 // import { signInWithEmailAndPassword } from 'firebase/auth';
 
-// const Login = ({ role, goToSignup, goToStart }) => { // Change goToQuiz to goToStart
+// const AdminLogin = ({ role, goToStart }) => {
 //     const [email, setEmail] = useState('');
 //     const [password, setPassword] = useState('');
 //     const [error, setError] = useState('');
 
-//     const handleLogin = async (e) => {
+//     // Predefined admin email (replace this with the actual admin email)
+//     const adminEmail = 'admin@gmail.com'; // Replace with the real admin email
+
+//     const handleAdminLogin = async (e) => {
 //         e.preventDefault();
 //         try {
+//             // Firebase authentication: sign in with email and password
 //             await signInWithEmailAndPassword(auth, email, password);
-//             console.log(`${role} Logged In:`, email);
-//             goToStart(); // Navigate to Start page after successful login
+
+//             // Check if the user email matches the admin email
+//             if (email !== adminEmail) {
+//                 setError("You're not authorized to log in as Admin.");
+//                 return;
+//             }
+
+//             // If the email matches, log in and navigate to the Start page
+//             console.log("Admin Logged In:", email);
+//             goToStart();
 //         } catch (err) {
-//             setError(err.message); // Set error message if login fails
+//             // Display any errors that occur during login
+//             setError(err.message);
 //         }
 //     };
 
@@ -24,14 +36,14 @@
 //             <div className="container h-100">
 //                 <div className="row h-100 align-items-center justify-content-center">
 //                     <div className="col-lg-6">
-//                         <h1 className='fw-bold mb-4'>Login as {role}</h1>
+//                         <h1 className='fw-bold mb-4'>Admin Login</h1>
 //                         {error && <div className="alert alert-danger">{error}</div>}
-//                         <form onSubmit={handleLogin} className="card p-4 bg-secondary">
+//                         <form onSubmit={handleAdminLogin} className="card p-4 bg-secondary">
 //                             <div className="mb-3">
 //                                 <input
 //                                     type="email"
 //                                     className="form-control"
-//                                     placeholder="Email"
+//                                     placeholder="Admin Email"
 //                                     value={email}
 //                                     onChange={(e) => setEmail(e.target.value)}
 //                                     required
@@ -47,8 +59,7 @@
 //                                     required
 //                                 />
 //                             </div>
-//                             <button type="submit" className="btn btn-light fw-bold w-100">Login</button>
-                            
+//                             <button type="submit" className="btn btn-light fw-bold w-100">Login as Admin</button>
 //                         </form>
 //                     </div>
 //                 </div>
@@ -57,39 +68,36 @@
 //     );
 // };
 
-// export default Login;
-
+// export default AdminLogin;
 
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
-const AdminLogin = ({ role, goToStart }) => {
+const AdminLogin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-    // Predefined admin email (replace this with the actual admin email)
-    const adminEmail = 'admin@gmail.com'; // Replace with the real admin email
+    // Predefined admin email
+    const adminEmail = 'admin@gmail.com'; // Replace with your actual admin email
 
     const handleAdminLogin = async (e) => {
         e.preventDefault();
         try {
-            // Firebase authentication: sign in with email and password
             await signInWithEmailAndPassword(auth, email, password);
 
-            // Check if the user email matches the admin email
             if (email !== adminEmail) {
                 setError("You're not authorized to log in as Admin.");
                 return;
             }
 
-            // If the email matches, log in and navigate to the Start page
             console.log("Admin Logged In:", email);
-            goToStart();
+            navigate('/start'); // Navigate to the Start page
         } catch (err) {
-            // Display any errors that occur during login
             setError(err.message);
         }
     };
