@@ -1,32 +1,30 @@
 // import React, { useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
 // import { auth } from '../firebase';
 // import { signInWithEmailAndPassword } from 'firebase/auth';
 
-// const AdminLogin = ({ role, goToStart }) => {
+// const AdminLogin = () => {
 //     const [email, setEmail] = useState('');
 //     const [password, setPassword] = useState('');
 //     const [error, setError] = useState('');
+//     const navigate = useNavigate();
 
-//     // Predefined admin email (replace this with the actual admin email)
-//     const adminEmail = 'admin@gmail.com'; // Replace with the real admin email
+//     // Predefined admin email
+//     const adminEmail = 'admin@gmail.com'; // Replace with your actual admin email
 
 //     const handleAdminLogin = async (e) => {
 //         e.preventDefault();
 //         try {
-//             // Firebase authentication: sign in with email and password
 //             await signInWithEmailAndPassword(auth, email, password);
 
-//             // Check if the user email matches the admin email
 //             if (email !== adminEmail) {
 //                 setError("You're not authorized to log in as Admin.");
 //                 return;
 //             }
 
-//             // If the email matches, log in and navigate to the Start page
 //             console.log("Admin Logged In:", email);
-//             goToStart();
+//             navigate('/start'); // Navigate to the Start page
 //         } catch (err) {
-//             // Display any errors that occur during login
 //             setError(err.message);
 //         }
 //     };
@@ -71,6 +69,7 @@
 // export default AdminLogin;
 
 
+// src/components/AdminLogin.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
@@ -88,17 +87,19 @@ const AdminLogin = () => {
     const handleAdminLogin = async (e) => {
         e.preventDefault();
         try {
+            // Sign in with Firebase authentication
             await signInWithEmailAndPassword(auth, email, password);
 
+            // Check if the logged-in email matches the admin email
             if (email !== adminEmail) {
                 setError("You're not authorized to log in as Admin.");
                 return;
             }
 
             console.log("Admin Logged In:", email);
-            navigate('/start'); // Navigate to the Start page
+            navigate('/upload-question'); // Navigate to the Upload Question page for Admin
         } catch (err) {
-            setError(err.message);
+            setError(err.message); // Display error message on failed login
         }
     };
 
@@ -108,7 +109,7 @@ const AdminLogin = () => {
                 <div className="row h-100 align-items-center justify-content-center">
                     <div className="col-lg-6">
                         <h1 className='fw-bold mb-4'>Admin Login</h1>
-                        {error && <div className="alert alert-danger">{error}</div>}
+                        {error && <div className="alert alert-danger">{error}</div>} {/* Display errors */}
                         <form onSubmit={handleAdminLogin} className="card p-4 bg-secondary">
                             <div className="mb-3">
                                 <input
